@@ -1,4 +1,4 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+This is a new [**PersonalExpensesTrackerApp**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 # Getting Started
 
@@ -12,9 +12,11 @@ To start the Metro dev server, run the following command from the root of your R
 
 ```sh
 # Using npm
+npm install
 npm start
 
 # OR using Yarn
+yarn install
 yarn start
 ```
 
