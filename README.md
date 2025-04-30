@@ -1,8 +1,38 @@
+# Personal Expenses Tracker App
+
+A React Native mobile application for tracking personal expenses, built with TypeScript and Redux.
+
+## Features
+
+- User Authentication (Login/Registration)
+- Secure Firebase Authentication
+- Redux state management with Redux Toolkit
+- TypeScript support
+- Native platform integration for iOS and Android
+
+## Tech Stack
+
+- React Native: 0.79.1
+- TypeScript: 5.0.4
+- Redux Toolkit: 2.7.0
+- React Navigation
+- Firebase Authentication
+- React Native Paper UI components
+- Redux Persist for state persistence
+
 This is a new [**PersonalExpensesTrackerApp**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 # Getting Started
 
 > **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+
+### Prerequisites
+
+- Node.js
+- Yarn package manager
+- Ruby (for iOS development)
+- Xcode (for iOS development)
+- Android Studio (for Android development)
 
 ## Step 1: Start Metro
 
@@ -97,3 +127,17 @@ To learn more about React Native, take a look at the following resources:
 - [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
 - [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+
+## Project Structure
+
+```
+PersonalExpensesTrackerApp/
+    ├── components/ # Reusable UI components
+    ├── screens/ # App screens
+    ├── redux/ # Redux store, slices, and operations
+    ├── services/ # API and external service integrations
+    ├── styles/ # Shared styles
+    ├── types/ # TypeScript type definitions
+    └── utils/ # Utility functions
+```
+
