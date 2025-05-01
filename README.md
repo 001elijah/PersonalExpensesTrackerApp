@@ -6,6 +6,8 @@ A React Native mobile application for tracking personal expenses, built with Typ
 
 - User Authentication (Login/Registration)
 - Secure Firebase Authentication
+- Browse past expenses
+- Add a new expense
 - Redux state management with Redux Toolkit
 - TypeScript support
 - Native platform integration for iOS and Android
@@ -133,6 +135,7 @@ To learn more about React Native, take a look at the following resources:
 ```
 PersonalExpensesTrackerApp/
     ├── components/ # Reusable UI components
+    ├── hooks/ # Reusable hooks
     ├── screens/ # App screens
     ├── redux/ # Redux store, slices, and operations
     ├── services/ # API and external service integrations

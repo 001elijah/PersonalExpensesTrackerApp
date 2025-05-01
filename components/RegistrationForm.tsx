@@ -45,11 +45,11 @@ export const RegistrationForm = ({onNavigate}: AuthFormProps) => {
     setIsUserPasswordInFocus(!isUserPasswordInFocus);
 
   const handleSubmitButton = async () => {
-    if (!userName) {
+    if (!userName.trim()) {
       Alert.alert('Please fill Name');
       return;
     }
-    if (!userEmail) {
+    if (!userEmail.trim()) {
       Alert.alert('Please fill Email');
       return;
     }
