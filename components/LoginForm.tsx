@@ -42,7 +42,7 @@ export const LoginForm = ({onNavigate}: AuthFormProps) => {
     setIsUserPasswordInFocus(!isUserPasswordInFocus);
 
   const handleSubmitButton = async () => {
-    if (!userEmail) {
+    if (!userEmail.trim()) {
       Alert.alert('Error', 'Please fill Email');
       return;
     }
