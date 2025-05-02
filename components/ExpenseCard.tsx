@@ -1,12 +1,13 @@
 import {format} from 'date-fns';
 import React from 'react';
-import {StyleSheet} from 'react-native';
-import {Divider, List, Text} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
+import {Divider, IconButton, List, Text} from 'react-native-paper';
 
 import {ExpenseCategory, ExpenseData} from '../types/ExpenseTypes.ts';
 
 type ExpenseCardProps = {
   expense: ExpenseData;
+  onNavigate: () => void;
 };
 
 const getCategoryIcon = (category: ExpenseCategory) => {
@@ -38,18 +39,27 @@ const ExpenseAmount = ({amount}: {amount: number}) => (
   <Text style={styles.amount}>${amount.toFixed(2)}</Text>
 );
 
-const renderExpenseAmount = (amount: number) => (
-  <ExpenseAmount amount={amount} />
+const renderRight = (amount: number) => () => (
+  <View style={styles.rightContainer}>
+    <ExpenseAmount amount={amount} />
+    <IconButton
+      icon="chevron-right"
+      size={24}
+      iconColor="rgba(0, 0, 0, 0.54)"
+    />
+  </View>
 );
 
-export const ExpenseCard = ({expense}: ExpenseCardProps) => {
+
+export const ExpenseCard = ({expense, onNavigate}: ExpenseCardProps) => {
   return (
     <React.Fragment key={expense.id}>
       <List.Item
         title={expense.title}
         description={format(expense.date, 'PPP')}
         left={renderListIcon(expense.category)}
-        right={() => renderExpenseAmount(expense.amount)}
+        onPress={onNavigate}
+        right={renderRight(expense.amount)}
       />
       <Divider />
     </React.Fragment>
@@ -61,5 +71,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     paddingRight: 16,
+  },
+  rightContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingRight: 8,
+  },
+  listItem: {
+    backgroundColor: '#fff',
+    paddingVertical: 4,
   },
 });

@@ -81,7 +81,11 @@ export const ExpensesScreen = () => {
       ) : (
         <List.Section>
           {expenses.map(expense => (
-            <ExpenseCard key={expense.id} expense={expense} />
+            <ExpenseCard
+              key={expense.id}
+              onNavigate={() => navigation.navigate('ManageExpenseScreen', { expense })}
+              expense={expense}
+            />
           ))}
         </List.Section>
       )}
