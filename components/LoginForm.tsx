@@ -5,15 +5,18 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  Text,
-  TextInput,
   TouchableWithoutFeedback,
-  View,
+  TextInput,
 } from 'react-native';
-import {ActivityIndicator, MD2Colors} from 'react-native-paper';
+import {
+  MD2Colors,
+  Text,
+  TextInput as PaperTextInput,
+  Surface,
+} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {ShowButton} from './ShowButton.tsx';
+import {Spinner} from './Spinner.tsx';
 import {SubmitAuth} from './SubmitAuth.tsx';
 import {ToggleAuth} from './ToggleAuth.tsx';
 import backgroundImage from '../assets/images/background-2x.jpg';
@@ -26,20 +29,14 @@ import {AuthFormProps} from '../types/AuthStackParamList.ts';
 export const LoginForm = ({onNavigate}: AuthFormProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const loading = useSelector(selectIsLoading);
-  const [isUserEmailInFocus, setIsUserEmailInFocus] = useState(false);
-  const [isUserPasswordInFocus, setIsUserPasswordInFocus] = useState(false);
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
   const emailInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
 
   const toggleShowPassword = () => setShowPassword(!showPassword);
-
-  const toggleUserEmailFocus = () => setIsUserEmailInFocus(!isUserEmailInFocus);
-  const toggleUserPasswordFocus = () =>
-    setIsUserPasswordInFocus(!isUserPasswordInFocus);
 
   const handleSubmitButton = async () => {
     if (!userEmail.trim()) {
@@ -78,62 +75,47 @@ export const LoginForm = ({onNavigate}: AuthFormProps) => {
       style={authStyles.backgroundImage}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <View style={authStyles.wrapper}>
-            <Text style={authStyles.authTitle}>Sign in</Text>
-            <View style={authStyles.sectionStyle}>
-              <TextInput
-                autoCapitalize="none"
-                style={
-                  isUserEmailInFocus
-                    ? authStyles.inputInFocusStyle
-                    : authStyles.inputStyle
-                }
-                onFocus={toggleUserEmailFocus}
-                onBlur={toggleUserEmailFocus}
-                onChangeText={UserEmail => setUserEmail(UserEmail)}
-                underlineColorAndroid="#f000"
-                placeholder="Email address"
-                placeholderTextColor="#8b9cb5"
-                keyboardType="email-address"
-                ref={emailInputRef}
-                returnKeyType="next"
-                onSubmitEditing={() =>
-                  passwordInputRef.current && passwordInputRef.current.focus()
-                }
-                submitBehavior="blurAndSubmit"
-              />
-            </View>
-            <View
-              style={[authStyles.sectionStyle, authStyles.sectionStyleLast]}>
-              <TextInput
-                style={
-                  isUserPasswordInFocus
-                    ? authStyles.inputInFocusStyle
-                    : authStyles.inputStyle
-                }
-                onFocus={toggleUserPasswordFocus}
-                onBlur={toggleUserPasswordFocus}
-                onChangeText={UserPassword => setUserPassword(UserPassword)}
-                underlineColorAndroid="#f000"
-                placeholder="Enter password"
-                placeholderTextColor="#8b9cb5"
-                ref={passwordInputRef}
-                returnKeyType="next"
-                secureTextEntry={showPassword}
-                submitBehavior={'blurAndSubmit'}
-              />
-              <ShowButton onPress={toggleShowPassword} />
-            </View>
+          behavior={Platform.OS === 'ios' ? 'padding' : 'position'}>
+          <Surface style={authStyles.wrapper}>
+            <Text variant="headlineMedium" style={authStyles.authTitle}>
+              Sign in
+            </Text>
+            <PaperTextInput
+              mode="outlined"
+              label="Email address"
+              autoCapitalize="none"
+              value={userEmail}
+              onChangeText={setUserEmail}
+              keyboardType="email-address"
+              ref={emailInputRef}
+              returnKeyType="next"
+              onSubmitEditing={() =>
+                passwordInputRef.current?.focus()
+              }
+              style={authStyles.input}
+            />
+            <PaperTextInput
+              mode="outlined"
+              label="Password"
+              value={userPassword}
+              onChangeText={setUserPassword}
+              secureTextEntry={!showPassword}
+              ref={passwordInputRef}
+              returnKeyType="done"
+              right={
+                <PaperTextInput.Icon
+                  icon={showPassword ? 'eye-off' : 'eye'}
+                  onPress={toggleShowPassword}
+                />
+              }
+              style={authStyles.input}
+            />
             <SubmitAuth
               text={'Sign in'}
               onSubmit={handleSubmitButton}
               icon={
                 loading && (
-                  <ActivityIndicator
-                    animating={true}
-                    color={MD2Colors.red800}
-                  />
+                  <Spinner color={MD2Colors.red800} size={'small'}/>
                 )
               }
               disabled={loading}
@@ -143,7 +125,7 @@ export const LoginForm = ({onNavigate}: AuthFormProps) => {
               prompt={'Sign up'}
               onNavigate={onNavigate}
             />
-          </View>
+          </Surface>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </ImageBackground>

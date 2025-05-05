@@ -16,8 +16,7 @@ export const register = createAsyncThunk(
     'auth/register',
     async ({displayName, email, password}: RegisterData, {rejectWithValue}) => {
         try {
-            const userData: FirebaseAuthTypes.User | null =
-                (await registerAPI({displayName, email, password})) || null;
+            const userData: FirebaseAuthTypes.User | null = await registerAPI({displayName, email, password}) || null;
 
             if (!userData) {
                 return rejectWithValue('Registration failed');
@@ -25,7 +24,7 @@ export const register = createAsyncThunk(
 
             return {
                 uid: userData.uid,
-                name: userData.displayName,
+                name: displayName,
                 email: userData.email,
             };
         } catch (error) {

@@ -5,15 +5,18 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  Text,
-  TextInput,
   TouchableWithoutFeedback,
-  View,
+  TextInput,
 } from 'react-native';
-import {ActivityIndicator, MD2Colors} from 'react-native-paper';
+import {
+  MD2Colors,
+  Text,
+  TextInput as PaperTextInput,
+  Surface,
+} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {ShowButton} from './ShowButton.tsx';
+import {Spinner} from './Spinner.tsx';
 import {SubmitAuth} from './SubmitAuth.tsx';
 import {ToggleAuth} from './ToggleAuth.tsx';
 import backgroundImage from '../assets/images/background-2x.jpg';
@@ -26,35 +29,27 @@ import {AuthFormProps} from '../types/AuthStackParamList.ts';
 export const RegistrationForm = ({onNavigate}: AuthFormProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const loading = useSelector(selectIsLoading);
-  const [isUserNameInFocus, setIsUserNameInFocus] = useState(false);
-  const [isUserEmailInFocus, setIsUserEmailInFocus] = useState(false);
-  const [isUserPasswordInFocus, setIsUserPasswordInFocus] = useState(false);
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
   const emailInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
 
   const toggleShowPassword = () => setShowPassword(!showPassword);
 
-  const toggleUserNameFocus = () => setIsUserNameInFocus(!isUserNameInFocus);
-  const toggleUserEmailFocus = () => setIsUserEmailInFocus(!isUserEmailInFocus);
-  const toggleUserPasswordFocus = () =>
-    setIsUserPasswordInFocus(!isUserPasswordInFocus);
-
   const handleSubmitButton = async () => {
     if (!userName.trim()) {
-      Alert.alert('Please fill Name');
+      Alert.alert('Error', 'Please fill Name');
       return;
     }
     if (!userEmail.trim()) {
-      Alert.alert('Please fill Email');
+      Alert.alert('Error', 'Please fill Email');
       return;
     }
     if (!userPassword) {
-      Alert.alert('Please fill Password');
+      Alert.alert('Error', 'Please fill Password');
       return;
     }
 
@@ -68,14 +63,14 @@ export const RegistrationForm = ({onNavigate}: AuthFormProps) => {
       ).unwrap();
 
       if (!result) {
-        Alert.alert('Error', 'Login failed');
+        Alert.alert('Error', 'Registration failed');
       }
     } catch (error) {
       const errorMessage =
         typeof error === 'string'
           ? error
-          : 'An unexpected error occurred during login';
-      Alert.alert('Login Error', errorMessage);
+          : 'An unexpected error occurred during registration';
+      Alert.alert('Registration Error', errorMessage);
     }
   };
 
@@ -86,82 +81,59 @@ export const RegistrationForm = ({onNavigate}: AuthFormProps) => {
       style={authStyles.backgroundImage}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <View style={authStyles.wrapper}>
-            <Text style={authStyles.authTitle}>Sign up</Text>
-            <View style={authStyles.sectionStyle}>
-              <TextInput
-                autoCapitalize="none"
-                style={
-                  isUserNameInFocus
-                    ? authStyles.inputInFocusStyle
-                    : authStyles.inputStyle
-                }
-                onFocus={toggleUserNameFocus}
-                onBlur={toggleUserNameFocus}
-                onChangeText={UserName => setUserName(UserName)}
-                underlineColorAndroid="#f000"
-                placeholder="Enter name"
-                placeholderTextColor="#8b9cb5"
-                returnKeyType="next"
-                onSubmitEditing={() =>
-                  emailInputRef.current && emailInputRef.current.focus()
-                }
-                submitBehavior="blurAndSubmit"
-              />
-            </View>
-            <View style={authStyles.sectionStyle}>
-              <TextInput
-                style={
-                  isUserEmailInFocus
-                    ? authStyles.inputInFocusStyle
-                    : authStyles.inputStyle
-                }
-                onFocus={toggleUserEmailFocus}
-                onBlur={toggleUserEmailFocus}
-                onChangeText={UserEmail => setUserEmail(UserEmail)}
-                underlineColorAndroid="#f000"
-                placeholder="Enter email address"
-                placeholderTextColor="#8b9cb5"
-                keyboardType="email-address"
-                ref={emailInputRef}
-                returnKeyType="next"
-                onSubmitEditing={() =>
-                  passwordInputRef.current && passwordInputRef.current.focus()
-                }
-                submitBehavior="blurAndSubmit"
-              />
-            </View>
-            <View
-              style={[authStyles.sectionStyle, authStyles.sectionStyleLast]}>
-              <TextInput
-                style={
-                  isUserPasswordInFocus
-                    ? authStyles.inputInFocusStyle
-                    : authStyles.inputStyle
-                }
-                onFocus={toggleUserPasswordFocus}
-                onBlur={toggleUserPasswordFocus}
-                onChangeText={UserPassword => setUserPassword(UserPassword)}
-                underlineColorAndroid="#f000"
-                placeholder="Enter password"
-                placeholderTextColor="#8b9cb5"
-                ref={passwordInputRef}
-                returnKeyType="next"
-                secureTextEntry={showPassword}
-                submitBehavior="blurAndSubmit"
-              />
-              <ShowButton onPress={toggleShowPassword} />
-            </View>
+          behavior={Platform.OS === 'ios' ? 'padding' : 'position'}>
+          <Surface style={authStyles.wrapper}>
+            <Text variant="headlineMedium" style={authStyles.authTitle}>
+              Sign up
+            </Text>
+            <PaperTextInput
+              mode="outlined"
+              label="Name"
+              value={userName}
+              onChangeText={setUserName}
+              autoCapitalize="none"
+              returnKeyType="next"
+              onSubmitEditing={() =>
+                emailInputRef.current?.focus()
+              }
+              style={authStyles.input}
+            />
+            <PaperTextInput
+              mode="outlined"
+              label="Email address"
+              value={userEmail}
+              onChangeText={setUserEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              ref={emailInputRef}
+              returnKeyType="next"
+              onSubmitEditing={() =>
+                passwordInputRef.current?.focus()
+              }
+              style={authStyles.input}
+            />
+            <PaperTextInput
+              mode="outlined"
+              label="Password"
+              value={userPassword}
+              onChangeText={setUserPassword}
+              secureTextEntry={!showPassword}
+              ref={passwordInputRef}
+              returnKeyType="done"
+              right={
+                <PaperTextInput.Icon
+                  icon={showPassword ? 'eye-off' : 'eye'}
+                  onPress={toggleShowPassword}
+                />
+              }
+              style={authStyles.input}
+            />
             <SubmitAuth
               text={'Register'}
               onSubmit={handleSubmitButton}
               icon={
                 loading && (
-                  <ActivityIndicator
-                    animating={true}
-                    color={MD2Colors.red800}
-                  />
+                  <Spinner color={MD2Colors.red800} size={'small'}/>
                 )
               }
               disabled={loading}
@@ -171,7 +143,7 @@ export const RegistrationForm = ({onNavigate}: AuthFormProps) => {
               prompt={'Sign in'}
               onNavigate={onNavigate}
             />
-          </View>
+          </Surface>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </ImageBackground>
