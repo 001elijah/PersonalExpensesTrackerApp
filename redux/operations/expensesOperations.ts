@@ -2,7 +2,12 @@ import {User} from '@firebase/auth';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {FirebaseError} from 'firebase/app';
 
-import {createExpenseAPI, deleteExpenseAPI, readExpensesAPI} from '../../services/firebaseAPI.ts';
+import {
+  createExpenseAPI,
+  deleteExpenseAPI,
+  readExpensesAPI,
+  updateExpenseAPI,
+} from '../../services/firebaseAPI.ts';
 import {FirestoreExpenseData} from '../../types/ExpenseTypes.ts';
 import {getReadableErrorMessage} from '../../utils/getReadableFirebaseError.ts';
 
@@ -21,17 +26,35 @@ export const create = createAsyncThunk(
   },
 );
 
-export const read = createAsyncThunk('expenses/read', async (uid: User['uid'], {rejectWithValue}) => {
-  try {
-    const expenses = await readExpensesAPI(uid);
-    return [...expenses];
-  } catch (error) {
-    return rejectWithValue(
-      getReadableErrorMessage((error as FirebaseError).code) ||
-      'An unexpected error occurred during expenses fetch',
-    );
-  }
-});
+export const read = createAsyncThunk(
+  'expenses/read',
+  async (uid: User['uid'], {rejectWithValue}) => {
+    try {
+      const expenses = await readExpensesAPI(uid);
+      return [...expenses];
+    } catch (error) {
+      return rejectWithValue(
+        getReadableErrorMessage((error as FirebaseError).code) ||
+          'An unexpected error occurred during expenses fetch',
+      );
+    }
+  },
+);
+
+export const updateExpense = createAsyncThunk(
+  'expenses/update',
+  async (expense: FirestoreExpenseData, {rejectWithValue}) => {
+    try {
+      const data = await updateExpenseAPI(expense);
+      return {...data};
+    } catch (error) {
+      return rejectWithValue(
+        getReadableErrorMessage((error as FirebaseError).code) ||
+          'An unexpected error occurred during expense update',
+      );
+    }
+  },
+);
 
 export const deleteExpense = createAsyncThunk(
   'expenses/delete',
@@ -41,7 +64,8 @@ export const deleteExpense = createAsyncThunk(
       return expenseId;
     } catch (error) {
       return rejectWithValue(
-        getReadableErrorMessage((error as FirebaseError).code) || 'An unexpected error occurred during expense deletion',
+        getReadableErrorMessage((error as FirebaseError).code) ||
+          'An unexpected error occurred during expense deletion',
       );
     }
   },

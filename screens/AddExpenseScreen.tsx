@@ -12,7 +12,7 @@ import {HomeStackParamList} from '../types/HomeStackParamList.ts';
 
 export const AddExpenseScreen = () => {
   const route = useRoute<RouteProp<HomeStackParamList, 'AddExpenseScreen'>>();
-  const { uid } = route.params;
+  const {uid} = route.params;
   const dispatch = useDispatch<AppDispatch>();
   const [expense, setExpense] = useState<Expense>({
     uid: uid as string,
@@ -27,7 +27,6 @@ export const AddExpenseScreen = () => {
   });
 
   const handleSubmit = () => {
-    console.log('Submitting expense: ', expense);
     const expenseToSubmit = {
       ...expense,
       amount: parseFloat(expense.amount?.toString().replace(',', '.') || '0'),

@@ -1,7 +1,12 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 import {ExpenseData, ExpenseCategory} from '../../types/ExpenseTypes.ts';
-import {create, deleteExpense, read} from '../operations/expensesOperations';
+import {
+  create,
+  deleteExpense,
+  read,
+  updateExpense,
+} from '../operations/expensesOperations';
 
 const initialState: ExpenseData[] = [
   {
@@ -25,7 +30,8 @@ const expensesSlice = createSlice({
           id: payload.id ?? null,
           title: payload.title ?? null,
           amount: payload.amount?.toString() ?? null,
-          category: (payload.category?.toLowerCase() as ExpenseCategory) ?? null,
+          category:
+            (payload.category?.toLowerCase() as ExpenseCategory) ?? null,
           date: payload.date?.toString() ?? null,
           uid: payload.uid ?? null,
         });
@@ -39,6 +45,20 @@ const expensesSlice = createSlice({
           date: item.date?.toString() ?? null,
           uid: item.uid ?? null,
         }));
+      })
+      .addCase(updateExpense.fulfilled, (state, {payload}) => {
+        const index = state.findIndex(expense => expense.id === payload?.id);
+        if (index !== -1) {
+          state[index] = {
+            id: payload.id ?? null,
+            title: payload.title ?? null,
+            amount: payload.amount?.toString() ?? null,
+            category:
+              (payload.category?.toLowerCase() as ExpenseCategory) ?? null,
+            date: payload.date?.toString() ?? null,
+            uid: payload.uid ?? null,
+          };
+        }
       })
       .addCase(deleteExpense.fulfilled, (state, {payload}) => {
         return state.filter(expense => expense.id !== payload);
