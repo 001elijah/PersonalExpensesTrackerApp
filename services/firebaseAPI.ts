@@ -1,7 +1,9 @@
 import {FirebaseAuthTypes,getAuth} from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
-import {LoginData, RegisterData} from '../types/User.ts';
-
+import {FirestoreExpenseData} from '../types/ExpenseTypes.ts';
+import {User, LoginData, RegisterData} from '../types/User.ts';
+import {transformExpenseData} from '../utils/transformExpensesData.ts';
 const auth = getAuth();
 
 export const registerAPI = async ({
@@ -36,4 +38,22 @@ export const getUserProfileAPI = () => {
       resolve(user);
     });
   });
+};
+
+export const createExpenseAPI = async ({uid, title, amount, category, date}: FirestoreExpenseData): Promise<FirestoreExpenseData> => {
+  const docRef = await firestore().collection('expenses').add({uid, title, amount, category, date});
+  const docSnapshot = await docRef.get();
+  const data = docSnapshot.data();
+  return transformExpenseData(docSnapshot.id, data);
+};
+
+export const readExpensesAPI = async (uid: User['uid']): Promise<FirestoreExpenseData[]> => {
+  const snapshot = await firestore().collection('expenses').where('uid', '==', uid).get();
+  return snapshot.docs.map((doc) =>
+    transformExpenseData(doc.id, doc.data()),
+  );
+};
+
+export const deleteExpenseAPI = async (id: string) => {
+  await firestore().collection('expenses').doc(id).delete();
 };

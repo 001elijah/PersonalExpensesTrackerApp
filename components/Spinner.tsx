@@ -2,10 +2,10 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {ActivityIndicator} from 'react-native-paper';
 
-export const Spinner = () => {
+export const Spinner = ({ size = 'large', color }: {size?: number | 'small' | 'large' | undefined, color?: string | undefined}) => {
   return (
     <View style={styles.loadingContainer}>
-      <ActivityIndicator size="large" />
+      <ActivityIndicator animating={true} color={color} size={size} />
     </View>
   );
 };

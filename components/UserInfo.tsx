@@ -1,8 +1,11 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Surface, Text} from 'react-native-paper';
+import {useSelector} from 'react-redux';
 
 import {LogOutButton} from './LogOutButton.tsx';
+import {Spinner} from './Spinner.tsx';
+import {selectIsLoading} from '../redux/selectors/loaderSelectors.ts';
 import {User} from '../types/User.ts';
 
 type UserInfoProps = {
@@ -11,13 +14,19 @@ type UserInfoProps = {
 }
 
 export const UserInfo = ({user, onLogoOut}: UserInfoProps) => {
+  const loading = useSelector(selectIsLoading);
   return (
     <Surface style={styles.userInfoContainer} elevation={1}>
-      <Text style={styles.userName}>Welcome, {user.name}</Text>
-      <Text style={styles.userEmail}>{user.email}</Text>
-      <View style={styles.logoutButton}>
-        <LogOutButton onPress={onLogoOut} />
-      </View>
+      {loading ?
+        <Spinner size={'small'}/> :
+        <React.Fragment>
+          <Text style={styles.userName}>Welcome, {user?.name}</Text>
+          <Text style={styles.userEmail}>{user?.email}</Text>
+          <View style={styles.logoutButton}>
+            <LogOutButton onPress={onLogoOut} />
+          </View>
+        </React.Fragment>
+      }
     </Surface>
   );
 };

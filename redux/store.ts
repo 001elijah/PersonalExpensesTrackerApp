@@ -12,6 +12,7 @@ import {
 } from 'redux-persist';
 
 import authReducer from './slices/authSlice';
+import expensesSliceReducer from './slices/expensesSlice';
 import loaderSliceReducer from './slices/loaderSlice';
 
 const authPersistConfig = {
@@ -25,6 +26,7 @@ const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
 const rootReducer = combineReducers({
     authorized: persistedAuthReducer,
     loader: loaderSliceReducer,
+    expenses: expensesSliceReducer,
 });
 
 const store = configureStore({

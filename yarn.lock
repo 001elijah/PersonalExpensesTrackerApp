@@ -2063,6 +2063,11 @@
   dependencies:
     plist "^3.1.0"
 
+"@react-native-firebase/firestore@^22.1.0":
+  version "22.1.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-22.1.0.tgz#849f26b2a8b526da4aca17dfd32f6b5205c03705"
+  integrity sha512-jiizCp+XGMDy7FjuuSAOhjp6dgkFOgZZRoWnSYAOxo9kHJKkJqwtXTO3Bmc94nTGudQGoRVFWG2D8CPv+Cj7hA==
+
 "@react-native/assets-registry@0.79.1":
   version "0.79.1"
   resolved "https://registry.yarnpkg.com/@react-native/assets-registry/-/assets-registry-0.79.1.tgz#39ce0a710a03d98c276cfa2877a925f1677614bd"
