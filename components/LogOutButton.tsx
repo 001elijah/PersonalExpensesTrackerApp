@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 import {IconButton} from 'react-native-paper';
 
 interface LogOutButtonProps {
-  onPress: () => Promise<void>;
+  onPress: () => void;
 }
 
 export const LogOutButton = ({ onPress }: LogOutButtonProps) => (

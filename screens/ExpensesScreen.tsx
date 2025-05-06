@@ -1,8 +1,8 @@
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet} from 'react-native';
-import {FAB, useTheme} from 'react-native-paper';
+import {Button, Dialog, FAB, Portal, Text, useTheme} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -31,8 +31,13 @@ export const ExpensesScreen = () => {
   const user = useSelector(selectUser);
   const expenses = useSelector(selectExpenses);
   const theme = useTheme();
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
+  const handleLogoutPress = () => {
+    setShowLogoutDialog(true);
+  };
   const handleLogOut = async () => {
+    setShowLogoutDialog(false);
     await dispatch(logout());
     navigation.replace('AuthScreen');
   };
@@ -48,28 +53,45 @@ export const ExpensesScreen = () => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      <UserInfo user={user} onLogoOut={handleLogOut} />
+      <UserInfo user={user} onLogoOut={handleLogoutPress} />
       {loading ? (
         <Spinner />
       ) : (
-          <FlatList
-            bounces={true}
-            contentContainerStyle={styles.listContainer}
-            data={expenses}
-            keyExtractor={(item, index) => item.id?.toString() || index.toString()}
-            ListEmptyComponent={<NoExpensesMessage />}
-            renderItem={({item}) => (
-              <ExpenseCard
-                key={item.id}
-                onNavigate={() =>
-                  navigation.navigate('ManageExpenseScreen', {expense: item})
-                }
-                expense={item}
-              />
-            )}
-            showsVerticalScrollIndicator={false}
-          />
+        <FlatList
+          bounces={true}
+          contentContainerStyle={styles.listContainer}
+          data={expenses}
+          keyExtractor={(item, index) =>
+            item.id?.toString() || index.toString()
+          }
+          ListEmptyComponent={<NoExpensesMessage />}
+          renderItem={({item}) => (
+            <ExpenseCard
+              key={item.id}
+              onNavigate={() =>
+                navigation.navigate('ManageExpenseScreen', {expense: item})
+              }
+              expense={item}
+            />
+          )}
+          showsVerticalScrollIndicator={false}
+        />
       )}
+
+      <Portal>
+        <Dialog
+          visible={showLogoutDialog}
+          onDismiss={() => setShowLogoutDialog(false)}>
+          <Dialog.Title>Confirm Logout</Dialog.Title>
+          <Dialog.Content>
+            <Text>Are you sure you want to log out?</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setShowLogoutDialog(false)}>Cancel</Button>
+            <Button onPress={handleLogOut}>Logout</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
 
       <FAB
         style={[styles.fab, {backgroundColor: theme.colors.primary}]}
