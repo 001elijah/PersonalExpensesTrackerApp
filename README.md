@@ -21,6 +21,7 @@ A React Native mobile application for tracking personal expenses, built with Typ
 - Redux Toolkit: 2.7.0
 - React Navigation
 - Firebase Authentication
+- Firebase Firestore (Firebase stands out for its seamless integration with Google Cloud services and robust real-time synchronization capabilities, making it especially powerful for mobile applications requiring instant data updates)
 - React Native Paper UI components
 - Redux Persist for state persistence
 

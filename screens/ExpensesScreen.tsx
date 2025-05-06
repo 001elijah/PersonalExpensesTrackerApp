@@ -1,8 +1,8 @@
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {useEffect} from 'react';
-import {StyleSheet} from 'react-native';
-import {FAB, List, useTheme} from 'react-native-paper';
+import {FlatList, StyleSheet} from 'react-native';
+import {FAB, useTheme} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -51,24 +51,32 @@ export const ExpensesScreen = () => {
       <UserInfo user={user} onLogoOut={handleLogOut} />
       {loading ? (
         <Spinner />
-      ) : !expenses.length ? (
-        <NoExpensesMessage />
       ) : (
-        <List.Section>
-          {expenses.map(expense => (
-            <ExpenseCard
-              key={expense.id}
-              onNavigate={() => navigation.navigate('ManageExpenseScreen', { expense })}
-              expense={expense}
-            />
-          ))}
-        </List.Section>
+          <FlatList
+            bounces={true}
+            contentContainerStyle={styles.listContainer}
+            data={expenses}
+            keyExtractor={(item, index) => item.id?.toString() || index.toString()}
+            ListEmptyComponent={<NoExpensesMessage />}
+            renderItem={({item}) => (
+              <ExpenseCard
+                key={item.id}
+                onNavigate={() =>
+                  navigation.navigate('ManageExpenseScreen', {expense: item})
+                }
+                expense={item}
+              />
+            )}
+            showsVerticalScrollIndicator={false}
+          />
       )}
 
       <FAB
         style={[styles.fab, {backgroundColor: theme.colors.primary}]}
         icon="plus"
-        onPress={() => navigation.navigate('AddExpenseScreen', { uid: user?.uid })}
+        onPress={() =>
+          navigation.navigate('AddExpenseScreen', {uid: user?.uid})
+        }
       />
     </SafeAreaView>
   );
@@ -94,5 +102,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 20,
     bottom: 20,
+  },
+  listContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 80,
   },
 });
