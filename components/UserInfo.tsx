@@ -10,7 +10,7 @@ import {User} from '../types/User.ts';
 
 type UserInfoProps = {
   user: User;
-  onLogoOut: () => Promise<void>;
+  onLogoOut: () => void;
 }
 
 export const UserInfo = ({user, onLogoOut}: UserInfoProps) => {
