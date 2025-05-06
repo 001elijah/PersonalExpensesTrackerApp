@@ -14,6 +14,20 @@ A React Native mobile application for tracking personal expenses, built with Typ
 - TypeScript support
 - Native platform integration for iOS and Android
 
+## Screenshots
+
+Here are some screenshots showcasing the app's main features:
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+    <img src="./demo/Simulator Screenshot - iPhone 16 Pro - 2025-05-06 at 11.39.25.jpg" width="200" alt="Login Screen"/>
+    <img src="./demo/Simulator Screenshot - iPhone 16 Pro - 2025-05-06 at 11.39.54.jpg" width="200" alt="Registration Screen"/>
+    <img src="./demo/Simulator Screenshot - iPhone 16 Pro - 2025-05-06 at 11.40.39.jpg" width="200" alt="Expenses List"/>
+    <img src="./demo/Simulator Screenshot - iPhone 16 Pro - 2025-05-06 at 11.40.43.jpg" width="200" alt="Expense Details"/>
+    <img src="./demo/Simulator Screenshot - iPhone 16 Pro - 2025-05-06 at 11.40.52.jpg" width="200" alt="Add Expense"/>
+    <img src="./demo/Simulator Screenshot - iPhone 16 Pro - 2025-05-06 at 11.41.00.jpg" width="200" alt="Edit Expense"/>
+    <img src="./demo/Simulator Screenshot - iPhone 16 Pro - 2025-05-06 at 11.41.09.jpg" width="200" alt="Settings Screen"/>
+</div>
+
 ## Tech Stack
 
 - React Native: 0.79.1
